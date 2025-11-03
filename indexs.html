@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RedBox Restaurant</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f7f9fc;
+        margin: 0;
+        padding: 0;
+        color: #333;
+      }
+      header {
+        position: relative;
+        background: #00334e
+          url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1400&q=80")
+          center/cover no-repeat;
+        padding: 15px 20px;
+        color: white;
+      }
+      header::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 0;
+      }
+      nav {
+        position: relative;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        z-index: 1;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        font-size: 1.4rem;
+        min-width: 200px;
+      }
+      .logo img {
+        width: 32px;
+        height: 32px;
+      }
+      .menu-btn {
+        background: rgba(255 255 255 / 0.2);
+        border: none;
+        outline: none;
+        padding: 8px 16px;
+        border-radius: 26px;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        font-size: 0.9rem;
+        white-space: nowrap;
+      }
+      .menu-btn.active,
+      .menu-btn:hover {
+        background: #c03a5d;
+      }
+      /* Category color codings */
+      .menu-btn.snacks {
+        background: #6bbc9a;
+      }
+      .menu-btn.snacks.active,
+      .menu-btn.snacks:hover {
+        background: #45a87c;
+      }
+      .menu-btn.salad {
+        background: #ba9a4f;
+      }
+      .menu-btn.salad.active,
+      .menu-btn.salad:hover {
+        background: #957b3c;
+      }
+      .menu-btn.khmer {
+        background: #4ca3b7;
+      }
+      .menu-btn.khmer.active,
+      .menu-btn.khmer:hover {
+        background: #3d7d92;
+      }
+      .menu-btn.food {
+        background: #858585;
+      }
+      .menu-btn.food.active,
+      .menu-btn.food:hover {
+        background: #5e5e5e;
+      }
+      .menu-btn.grilled {
+        background: #cc5a7d;
+      }
+      .menu-btn.grilled.active,
+      .menu-btn.grilled:hover {
+        background: #9e4260;
+      }
+      .menu-btn.fried {
+        background: #555;
+      }
+      .menu-btn.fried.active,
+      .menu-btn.fried:hover {
+        background: #333;
+      }
+      .menu-btn.soft_drinks {
+        background: #c8a55d;
+      }
+      .menu-btn.soft_drinks.active,
+      .menu-btn.soft_drinks:hover {
+        background: #9b8445;
+      }
+
+      .search-container {
+        flex-grow: 1;
+        max-width: 380px;
+        position: relative;
+        margin-left: auto;
+      }
+      .search-container input[type="text"] {
+        width: 100%;
+        padding: 8px 35px 8px 14px;
+        border-radius: 26px;
+        border: none;
+        font-size: 1rem;
+      }
+      .search-container svg {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        fill: #666;
+      }
+      .language {
+        margin-left: 15px;
+        cursor: pointer;
+        z-index: 1;
+      }
+      .language img {
+        width: 28px;
+        height: 20px;
+        border-radius: 4px;
+        border: 1px solid white;
+      }
+
+      .hero-image {
+        margin-top: 10px;
+        width: 100%;
+        height: 350px;
+        overflow: hidden;
+        border-radius: 8px;
+        position: relative;
+      }
+      .hero-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      main {
+        max-width: 1100px;
+        margin: 40px auto;
+        padding: 0 20px 60px 20px;
+      }
+      .section-title {
+        text-align: center;
+        font-weight: 700;
+        font-size: 1.6rem;
+        color: #444;
+        border-top: 2px solid #ddd;
+        border-bottom: 2px solid #ddd;
+        padding: 14px 0;
+        margin-bottom: 40px;
+        letter-spacing: 0.08em;
+      }
+      .food-menu {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 28px;
+      }
+      .food-card {
+        background: white;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        cursor: pointer;
+        position: relative;
+        transition: transform 0.2s ease;
+        text-align: center;
+      }
+      .food-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      }
+      .food-card img {
+        width: 100%;
+        height: 210px;
+        object-fit: cover;
+        background: #fff;
+      }
+      .hot-label {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        background: #ff4d7d;
+        color: white;
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding: 5px 12px;
+        border-radius: 26px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .food-name {
+        padding: 14px 12px 20px;
+        font-weight: 600;
+        font-size: 1.15rem;
+      }
+      .no-results {
+        text-align: center;
+        font-size: 1.2rem;
+        color: #777;
+        grid-column: 1/-1;
+        padding: 40px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="logo">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/2838/2838912.png"
+            alt="RedBox Logo"
+          />
+          <span id="restaurantName">RedBox Restaurant</span>
+        </div>
+
+        <button class="menu-btn active" data-key="main_course">
+          MAIN COURSE
+        </button>
+        <button class="menu-btn snacks" data-key="snacks">SNACKS</button>
+        <button class="menu-btn salad" data-key="salad_seafood">
+          SALAD AND SEAFOOD
+        </button>
+        <button class="menu-btn khmer" data-key="khmer_food">KHMER FOOD</button>
+        <button class="menu-btn food" data-key="food">Food</button>
+        <button class="menu-btn grilled" data-key="grilled">GRILLED</button>
+        <button class="menu-btn fried" data-key="fried">FRIED</button>
+        <button class="menu-btn soft_drinks" data-key="soft_drinks">
+          SOFT DRINKS
+        </button>
+
+        <div class="search-container">
+          <input type="text" id="searchInput" placeholder="Search menus..." />
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M10 2a8 8 0 015.292 13.708l4.207 4.207-1.414 1.414-4.207-4.207A8 8 0 1110 2zm0 2a6 6 0 100 12 6 6 0 000-12z"
+            />
+          </svg>
+        </div>
+
+        <div
+          class="language"
+          title="Change Language"
+          onclick="toggleLanguage()"
+        >
+          <img
+            id="langFlag"
+            src="https://flagcdn.com/w20/gb.png"
+            alt="English Flag"
+          />
+        </div>
+      </nav>
+
+      <div class="hero-image">
+        <img
+          src="https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=1274&q=80"
+          alt="Assorted Food"
+        />
+      </div>
+    </header>
+
+    <main>
+      <h2 class="section-title" id="sectionTitle">MAIN COURSE</h2>
+      <div class="food-menu" id="foodMenu">
+        <!-- food cards shown here -->
+      </div>
+    </main>
+
+    <script>
+      // Language dictionary translations (English and Khmer)
+      const translations = {
+        en: {
+          main_course: "MAIN COURSE",
+          snacks: "SNACKS",
+          salad_seafood: "SALAD AND SEAFOOD",
+          khmer_food: "KHMER FOOD",
+          food: "Food",
+          grilled: "GRILLED",
+          fried: "FRIED",
+          soft_drinks: "SOFT DRINKS",
+          search_placeholder: "Search menus...",
+          section_title: "MAIN COURSE",
+          hot_menu: "HOT MENU",
+          restaurant_name: "RedBox Restaurant",
+        },
+        kh: {
+          main_course: "អាហារសំខាន់",
+          snacks: "អាហារស្រួច",
+          salad_seafood: "បន្លែ និងម្ហូបសមុទ្រ",
+          khmer_food: "អាហារខ្មែរ",
+          food: "ម្ហូប",
+          grilled: "ដុតជ្រលក់",
+          fried: "ភីង",
+          soft_drinks: "ភេសជ្ជៈត្រជាក់ទន់",
+          search_placeholder: "ស្វែងរកម្ហូប...",
+          section_title: "អាហារសំខាន់",
+          hot_menu: "ម្ហូបក្តៅ",
+          restaurant_name: "ភោជនីយដ្ឋាន RedBox",
+        },
+      };
+
+      // Food data keyed by category translated in English and Khmer
+      const menuData = {
+        main_course: [
+          {
+            name_en: "Fried Rice with Vegetables",
+            name_kh: "បាយឆាផ្សំនឹងបន្លែ",
+            img: "https://cdn.pixabay.com/photo/2017/05/07/08/56/fried-rice-2299622_1280.jpg",
+            hot: false,
+          },
+          {
+            name_en: "Hot Pizza",
+            name_kh: "ពីហ្សាក្តៅ",
+            img: "https://cdn.pixabay.com/photo/2017/12/09/08/18/pizza-3007395_1280.jpg",
+            hot: true,
+          },
+        ],
+        snacks: [
+          {
+            name_en: "Spring Rolls",
+            name_kh: "នំមាត់",
+            img: "https://cdn.pixabay.com/photo/2017/01/02/16/04/spring-rolls-1940161_1280.jpg",
+            hot: false,
+          },
+          {
+            name_en: "Chicken Wings",
+            name_kh: "ស្លាបមាន់",
+            img: "https://cdn.pixabay.com/photo/2017/09/29/11/56/chicken-wings-2791734_1280.jpg",
+            hot: true,
+          },
+        ],
+        salad_seafood: [
+          {
+            name_en: "Shrimp Salad",
+            name_kh: "សាឡាតចៀម",
+            img: "https://cdn.pixabay.com/photo/2016/03/05/19/02/food-1239246_1280.jpg",
+            hot: false,
+          },
+          {
+            name_en: "Calamari Salad",
+            name_kh: "សាឡាតត្រីបង្គាស",
+            img: "https://cdn.pixabay.com/photo/2020/05/25/16/53/calamari-5220637_1280.jpg",
+            hot: false,
+          },
+        ],
+        khmer_food: [
+          {
+            name_en: "Fish Amok",
+            name_kh: "មុខអម៉ុកត្រី",
+            img: "https://cdn.pixabay.com/photo/2020/06/07/15/55/fish-amok-5279624_1280.jpg",
+            hot: true,
+          },
+          {
+            name_en: "Khmer BBQ",
+            name_kh: "បបូរមាន់ខ្មែរ",
+            img: "https://cdn.pixabay.com/photo/2021/07/18/10/26/grill-6475188_1280.jpg",
+            hot: false,
+          },
+        ],
+        food: [
+          {
+            name_en: "Burger",
+            name_kh: "បឺហ្គ័រ",
+            img: "https://cdn.pixabay.com/photo/2016/03/05/19/02/burger-1238246_1280.jpg",
+            hot: false,
+          },
+          {
+            name_en: "Spaghetti",
+            name_kh: "ស្ពា៉ហ្គេទី",
+            img: "https://cdn.pixabay.com/photo/2017/01/09/19/20/spaghetti-1966425_1280.jpg",
+            hot: false,
+          },
+        ],
+        grilled: [
+          {
+            name_en: "Grilled Chicken",
+            name_kh: "មាន់ញ.rollback",
+            img: "https://cdn.pixabay.com/photo/2017/08/04/02/01/grilled-chicken-2575943_1280.jpg",
+            hot: false,
+          },
+          {
+            name_en: "Grilled Shrimp",
+            name_kh: "ចៀមញ.Roll",
+            img: "https://cdn.pixabay.com/photo/2017/01/23/08/12/shrimp-2001917_1280.jpg",
+            hot: false,
+          },
+        ],
+        fried: [
+          {
+            name_en: "Fried Chicken",
+            name_kh: "មាន់បៀ",
+            img: "https://cdn.pixabay.com/photo/2016/03/05/19/02/fried-chicken-1238980_1280.jpg",
+            hot: true,
+          },
+          {
+            name_en: "Fried Calamari",
+            name_kh: "ត្រីបង្គារខ្វាយ",
+            img: "https://cdn.pixabay.com/photo/2017/09/30/17/45/fried-calamari-2804904_1280.jpg",
+            hot: false,
+          },
+        ],
+        soft_drinks: [
+          {
+            name_en: "Coke",
+            name_kh: "កូកា",
+            img: "https://cdn.pixabay.com/photo/2014/04/03/10/32/coke-310894_1280.png",
+            hot: false,
+          },
+          {
+            name_en: "Lemonade",
+            name_kh: "ទឹកលេមូន",
+            img: "https://cdn.pixabay.com/photo/2018/06/10/08/22/lemonade-3466102_1280.jpg",
+            hot: false,
+          },
+        ],
+      };
+
+      let currentLang = "en";
+
+      // Elements references
+      const buttons = document.querySelectorAll(".menu-btn");
+      const foodMenu = document.getElementById("foodMenu");
+      const sectionTitle = document.getElementById("sectionTitle");
+      const searchInput = document.getElementById("searchInput");
+      const restaurantNameElem = document.getElementById("restaurantName");
+      const langFlag = document.getElementById("langFlag");
+
+      function renderFood(categoryKey) {
+        foodMenu.innerHTML = "";
+
+        // Update section title in current language
+        sectionTitle.textContent = translations[currentLang][categoryKey] || "";
+
+        const foodList = menuData[categoryKey] || [];
+        const filter = searchInput.value.trim().toLowerCase();
+
+        let shownCount = 0;
+
+        foodList.forEach((food) => {
+          // Get name based on current language for filtering and display
+          const foodName = currentLang === "en" ? food.name_en : food.name_kh;
+          if (foodName.toLowerCase().includes(filter)) {
+            shownCount++;
+            const card = document.createElement("div");
+            card.className = "food-card";
+
+            if (food.hot) {
+              const hotLabel = document.createElement("span");
+              hotLabel.className = "hot-label";
+              hotLabel.textContent = translations[currentLang].hot_menu;
+              card.appendChild(hotLabel);
+            }
+
+            const img = document.createElement("img");
+            img.src = food.img;
+            img.alt = foodName;
+            card.appendChild(img);
+
+            const foodNameElem = document.createElement("div");
+            foodNameElem.className = "food-name";
+            foodNameElem.textContent = foodName;
+            card.appendChild(foodNameElem);
+
+            foodMenu.appendChild(card);
+          }
+        });
+
+        if (shownCount === 0) {
+          const noResultsElem = document.createElement("div");
+          noResultsElem.className = "no-results";
+          noResultsElem.textContent =
+            currentLang === "en" ? "No items found." : "គ្មានមុខអាហារជាមុន.";
+          foodMenu.appendChild(noResultsElem);
+        }
+      }
+
+      function setActiveButton(button) {
+        buttons.forEach((btn) => btn.classList.remove("active"));
+        button.classList.add("active");
+      }
+
+      // Event listeners for category buttons
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          setActiveButton(btn);
+          renderFood(btn.getAttribute("data-key"));
+          // Clear search on category switch
+          searchInput.value = "";
+        });
+      });
+
+      // Search filtering
+      searchInput.addEventListener("input", () => {
+        const activeBtn = document.querySelector(".menu-btn.active");
+        if (activeBtn) {
+          renderFood(activeBtn.getAttribute("data-key"));
+        }
+      });
+
+      // Language toggle function
+      function toggleLanguage() {
+        currentLang = currentLang === "en" ? "kh" : "en";
+        langFlag.src =
+          currentLang === "en"
+            ? "https://flagcdn.com/w20/gb.png"
+            : "https://flagcdn.com/w20/kh.png";
+        restaurantNameElem.textContent =
+          translations[currentLang].restaurant_name;
+        searchInput.placeholder = translations[currentLang].search_placeholder;
+
+        // Update category button texts
+        buttons.forEach((btn) => {
+          const key = btn.getAttribute("data-key");
+          btn.textContent = translations[currentLang][key];
+          if (btn.classList.contains("active")) {
+            // Update section title when active button text changes language
+            sectionTitle.textContent = translations[currentLang][key];
+          }
+        });
+
+        // Re-render food for current selection in new language
+        const activeBtn = document.querySelector(".menu-btn.active");
+        if (activeBtn) {
+          renderFood(activeBtn.getAttribute("data-key"));
+        }
+      }
+
+      // Initial rendering of main course
+      renderFood("main_course");
+    </script>
+  </body>
+</html>
